@@ -21,10 +21,10 @@ function errorHandler(fn) {
               httpOnly: false,
             })
             .status(200)
-            .json({ data: rest, message: "ok" });
+            .json({ rest, message: "ok" });
         }
         else{
-          res.status(200).json({ data: result, message: "ok" });
+          res.status(200).json({ result, message: "ok" });
         }
 
       }
