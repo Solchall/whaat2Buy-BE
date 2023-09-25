@@ -79,7 +79,11 @@ const login=errorHandler(withTransaction(
 // @access Public
 const newRefreshToken=errorHandler(withTransaction(
 async(req,res,session)=>{
-  const currentRefreshToken = await validateRefreshToken(req.body.refreshToken);
+    console.log("request body: ", req.body);
+    console.log("request cookies: ", req.cookies);
+  const currentRefreshToken = await validateRefreshToken(
+    req.cookies.refreshToken
+  );
     const refreshTokenDoc = models.RefreshToken({
       owner: currentRefreshToken.userId,
     });
@@ -110,7 +114,9 @@ async(req,res,session)=>{
 // @body {refreshToken}
 // @access Public
 const newAccessToken = errorHandler(async (req, res) => {
-  const refreshToken = await validateRefreshToken(req.body.refreshToken);
+  console.log("request body: ",req.body)
+  console.log("request cookies: ", req.cookies);
+  const refreshToken = await validateRefreshToken(req.cookies);
   const accessToken = createAccessToken(refreshToken.userId);
 
   return {
@@ -127,7 +133,9 @@ const newAccessToken = errorHandler(async (req, res) => {
 // @access Public
 const logout = errorHandler(
   withTransaction(async (req, res, session) => {
-    const refreshToken = await validateRefreshToken(req.body.refreshToken);
+    console.log("request body: ", req.body);
+    console.log("request cookies: ", req.cookies);
+    const refreshToken = await validateRefreshToken(req.cookies.refreshToken);
     await models.RefreshToken.deleteOne(
       { _id: refreshToken.tokenId },
       { session }
@@ -142,7 +150,9 @@ const logout = errorHandler(
 // @access Public
 const logoutAll = errorHandler(
   withTransaction(async (req, res, session) => {
-    const refreshToken = await validateRefreshToken(req.body.refreshToken);
+    console.log("request body: ", req.body);
+    console.log("request cookies: ", req.cookies);
+    const refreshToken = await validateRefreshToken(req.cookies.refreshToken);
     await models.RefreshToken.deleteMany(
       { owner: refreshToken.userId },
       { session }
