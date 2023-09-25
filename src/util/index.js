@@ -17,7 +17,7 @@ function errorHandler(fn) {
           const {refreshToken, ...rest}=result;
           // console.log(refreshToken, rest);
           res
-            .cookie("refreshToken", result, {
+            .cookie("refreshToken", refreshToken, {
               httpOnly: false,
             })
             .status(200)
