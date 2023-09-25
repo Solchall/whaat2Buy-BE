@@ -7,7 +7,7 @@ const verifyAccessToken = errorHandler(async (req, res, next) => {
   const token = authHeader && authHeader.split(" ")[1];
 
   if (!token) {
-    throw new HttpError(401, "Unauthorized");
+    throw new HttpError(401, "verifyAccessToken Unauthorized");
   }
 
   try {
@@ -15,7 +15,7 @@ const verifyAccessToken = errorHandler(async (req, res, next) => {
     req.userId = decodedToken.userId;
     next();
   } catch (e) {
-    throw new HttpError(401, "Unauthorized");
+    throw new HttpError(401, "verifyAccessToken Unauthorized");
 
   }
 });

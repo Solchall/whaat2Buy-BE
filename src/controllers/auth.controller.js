@@ -116,7 +116,7 @@ async(req,res,session)=>{
 const newAccessToken = errorHandler(async (req, res) => {
   console.log("request body: ",req.body)
   console.log("request cookies: ", req.cookies);
-  const refreshToken = await validateRefreshToken(req.cookies);
+  const refreshToken = await validateRefreshToken(req.cookies.refreshToken);
   const accessToken = createAccessToken(refreshToken.userId);
 
   return {
@@ -203,7 +203,7 @@ const validateRefreshToken = async (token) => {
       return jwt.verify(token, process.env.REFRESH_TOKEN_SECRET);
     } catch (err) {
       // err
-      throw new HttpError(401, "Unauthorized");
+      throw new HttpError(401, "validateRefreshToken Unauthorized");
     }
   };
 
@@ -215,7 +215,7 @@ const validateRefreshToken = async (token) => {
   if (tokenExists) {
     return decodedToken;
   } else {
-    throw new HttpError(401, "Unauthorized");
+    throw new HttpError(401, "validateRefreshToken Unauthorized");
   }
 };
 
