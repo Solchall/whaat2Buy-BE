@@ -12,7 +12,21 @@ function errorHandler(fn) {
         next(params);
       });
       if (!res.headersSent && !nextCalled) {
-        res.json(result);
+
+        if (result.refreshToken){
+          const {refreshToken, ...rest}=result;
+          // console.log(refreshToken, rest);
+          res
+            .cookie("refreshToken", result, {
+              httpOnly: false,
+            })
+            .status(200)
+            .json({ data: rest, message: "ok" });
+        }
+        else{
+          res.status(200).json({ data: result, message: "ok" });
+        }
+
       }
     } catch (e) {
       next(e);
