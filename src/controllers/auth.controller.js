@@ -114,7 +114,7 @@ async(req,res,session)=>{
 // @body {refreshToken}
 // @access Public
 const newAccessToken = errorHandler(async (req, res) => {
-  console.log("request body: ",req.body)
+  // console.log("request body: ",req.body)
   console.log("request cookies: ", req.cookies);
   const refreshToken = await validateRefreshToken(req.cookies.refreshToken);
   const accessToken = createAccessToken(refreshToken.userId);
