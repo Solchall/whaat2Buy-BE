@@ -1,5 +1,7 @@
 const express = require("express");
 const cors=require("cors");
+const cookieParser = require("cookie-parser");
+
 const logger = require("./logger");
 const routes = require("./routes");
 const connectToDatabase = require("./database");
@@ -14,6 +16,10 @@ app.use(
 
   })
 );
+
+// 요청된 쿠키를 쉽게 추출할 수 있도록 도와주는 미들웨어 
+// request 객체에 cookies 속성 부여
+app.use(cookieParser());
 
 app.use("/api", routes);
 
