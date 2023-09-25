@@ -18,7 +18,9 @@ function errorHandler(fn) {
           // console.log(refreshToken, rest);
           res
             .cookie("refreshToken", refreshToken, {
-              httpOnly: false,
+              httpOnly: true,
+              sameSite: "none",
+              secure: true,
             })
             .status(200)
             .json({ ...rest, message: "ok" });
