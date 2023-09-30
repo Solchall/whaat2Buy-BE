@@ -1,10 +1,16 @@
 const express = require("express");
-const cors=require("cors");
+const SocketIO = require("socket.io");
+const cors = require("cors");
 const cookieParser = require("cookie-parser");
+
 
 const logger = require("./logger");
 const routes = require("./routes");
 const connectToDatabase = require("./database");
+
+
+
+// App use
 const app = express();
 const port = process.env.PORT || 8000;
 
@@ -29,12 +35,21 @@ app.use((err, req, res, next) => {
   res.status(err.statusCode || 500).send({ error: err.message });
 });
 
+
+
 async function startServer() {
   await connectToDatabase();
 
-  app.listen(port, () => {
+  const expressServer = app.listen(port, () => {
     logger.info(`Server listening at http://localhost:${port}`);
   });
+  const io = require("socket.io")(expressServer);
+
+  io.on("connection", (socket) => {
+    console.log(`User ${socket.id} connected`);
+  });
+  console.log("connect");
+
 }
 
 module.exports = startServer;
