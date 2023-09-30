@@ -7,6 +7,7 @@ const cookieParser = require("cookie-parser");
 const logger = require("./logger");
 const routes = require("./routes");
 const connectToDatabase = require("./database");
+const webSocket = require("./socket");
 
 
 
@@ -43,12 +44,8 @@ async function startServer() {
   const expressServer = app.listen(port, () => {
     logger.info(`Server listening at http://localhost:${port}`);
   });
-  const io = require("socket.io")(expressServer);
 
-  io.on("connection", (socket) => {
-    console.log(`User ${socket.id} connected`);
-  });
-  console.log("connect");
+  webSocket(expressServer);
 
 }
 
