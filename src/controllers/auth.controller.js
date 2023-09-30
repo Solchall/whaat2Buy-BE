@@ -140,7 +140,7 @@ const logout = errorHandler(
       { _id: refreshToken.tokenId },
       { session }
     );
-    return { success: true };
+    
   })
 );
 
