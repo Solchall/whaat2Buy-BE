@@ -6,7 +6,6 @@ const likesSchema = new Schema({
   clothId: {
     type: String,
     required: true,
-    unique: true,
   },
 });
 
