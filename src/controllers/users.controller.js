@@ -14,7 +14,7 @@ const me = errorHandler(withTransaction(async (req, res,session) => {
   return userDoc;
 }));
 
-// @desc post user's farivate cloth Number
+// @desc post user's farivate clothId
 // @route POST /api/users/likes
 // @header {Bearer Token}
 // @access Private
@@ -29,9 +29,26 @@ const likes =  errorHandler(withTransaction(async (req, res, session) => {
 
     await likesDoc.save({ session });
   return  { success: true };
-}));;
+}));
+
+
+// @desc get All user's farivate clothId
+// @route get /api/users/likes
+// @header {Bearer Token}
+// @access Private
+
+const getLikesCloth = errorHandler(
+  withTransaction(async (req, res, session) => {
+    const clothDoc = await models.Likes.find( { "owner": req.userId } )
+    if (!clothDoc) {
+      throw new HttpError(400, "User not found");
+    }
+    return clothDoc;
+  })
+);
 
 module.exports = {
   me,
   likes,
+  getLikesCloth,
 };
