@@ -5,5 +5,9 @@ const router = express.Router();
 
 router.get("/me", middlewares.verifyAccessToken, controllers.users.me);
 router.post("/likes", middlewares.verifyAccessToken, controllers.users.likes);
-
+router.get(
+  "/likes",
+  middlewares.verifyAccessToken,
+  controllers.users.getLikesCloth
+);
 module.exports = router;
