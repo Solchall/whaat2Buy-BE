@@ -75,8 +75,8 @@ const login=errorHandler(withTransaction(
 
 // @desc get RefreshToken
 // @route POST api/auth/refreshToken
-// @body {refreshToken}
-// @access Public
+// @cookies {refreshToken}
+// @access Private
 const newRefreshToken=errorHandler(withTransaction(
 async(req,res,session)=>{
     console.log("request body: ", req.body);
@@ -111,8 +111,8 @@ async(req,res,session)=>{
 
 // @desc get AccessToken
 // @route POST api/auth/accessToken
-// @body {refreshToken}
-// @access Public
+// @cookies {refreshToken}
+// @access Private
 const newAccessToken = errorHandler(async (req, res) => {
   // console.log("request body: ",req.body)
   console.log("request cookies: ", req.cookies);
@@ -129,8 +129,8 @@ const newAccessToken = errorHandler(async (req, res) => {
 
 // @desc delete One RefreshToken related to user
 // @route POST api/auth/logout
-// @body {refreshToken}
-// @access Public
+// @cookies {refreshToken}
+// @access Private
 const logout = errorHandler(
   withTransaction(async (req, res, session) => {
     console.log("request body: ", req.body);

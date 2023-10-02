@@ -17,14 +17,15 @@ module.exports = (server) => {
   const io = SocketIO(server);
   //console.log(io);
   io.use((socket, next)=>{
-    const accessToken = socket.handshake.auth.token;
-    console.log("use", accessToken)
+    const userId = socket.handshake.auth.userId;
+    const accessToken = socket.handshake.auth.accessToken;
+    console.log("io use", accessToken, userId);
     if (accessToken) {
-      const decodedToken = jwt.verify(
+      /*const decodedToken = jwt.verify(
         accessToken,
         process.env.ACCESS_TOKEN_SECRET
       );
-      const userId = decodedToken.userId;
+      const userId = decodedToken.userId;*/
       socket.userId=userId;
     }
 next()
