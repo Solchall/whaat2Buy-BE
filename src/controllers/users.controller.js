@@ -37,7 +37,7 @@ const likes =  errorHandler(withTransaction(async (req, res, session) => {
       },
       { new: true, upsert: true }
     );
-    console.log("auth Controller: likes", response);
+    // console.log("auth Controller: likes", response);
 
     //await likesDoc.save({ session });
   return  { success: true };
@@ -68,7 +68,7 @@ const getLikesCloth = errorHandler(
 
 const saveUserMessage = errorHandler(
   withTransaction(async (req, res, session) => {
-    console.log("users Controller: userMessage", req.body);
+    // console.log("users Controller: userMessage", req.body);
 
     const userMessageDoc = models.userMessage({
       owner: req.userId,
