@@ -6,12 +6,13 @@ const { HttpError } = require("../error");
 // @route POST /api/users/me
 // @header {Bearer Token}
 // @access Private
-const me = errorHandler(withTransaction(async (req, res,session) => {
-  const userDoc = await models.User.findById(req.userId).exec();
+const info = errorHandler(withTransaction(async (req, res,session) => {
+  const userDoc= await models.User.findById(req.userId).exec();
+  const userData = userDoc["_doc"]
   if (!userDoc) {
     throw new HttpError(400, "User not found");
   }
-  return userDoc;
+  return { username: userData.username , email:userData.email};
 }));
 
 // @desc post user's farivate clothId
@@ -47,8 +48,29 @@ const getLikesCloth = errorHandler(
   })
 );
 
+// @desc save User Message
+// @route get /api/users/message
+// @header {Bearer Token}
+// @access Private
+
+const saveUserMessage = errorHandler(
+  withTransaction(async (req, res, session) => {
+    console.log("users Controller: userMessage", req.body);
+
+    const userMessageDoc = models.userMessage({
+      owner: req.userId,
+      clothId: req.body.clothId,
+      message: req.body.message
+    });
+
+    await userMessageDoc.save({ session });
+    return { success: true };
+  })
+);
+
 module.exports = {
-  me,
+  info,
   likes,
   getLikesCloth,
+  saveUserMessage,
 };
