@@ -134,7 +134,7 @@ const newAccessToken = errorHandler(async (req, res) => {
 const logout = errorHandler(
   withTransaction(async (req, res, session) => {
     console.log("request body: ", req.body);
-    console.log("request cookies: ", req.cookies);
+    console.log("request cookies: ", req.cookies.refreshToken);
     const refreshToken = await validateRefreshToken(req.cookies.refreshToken);
     await models.RefreshToken.deleteOne(
       { _id: refreshToken.tokenId },
