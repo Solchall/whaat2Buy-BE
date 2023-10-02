@@ -74,7 +74,7 @@ next()
           console.error(error);
         });*/
         axios.get("https://dummyjson.com/comments").then(()=>{
-          console.log("axios 요청",)
+          console.log("axios 요청")
         })
         io.sockets.emit("res:basicInfo", "기본 정보를 알려드릴게용~~~");
 
