@@ -52,7 +52,7 @@ next()
       });
 
       await userMessageDoc.save();
-      console.log("데이터 저장")
+      // console.log("데이터 저장")
     });
 
     socket.on("req:basicInfo",({item})=>{
@@ -63,7 +63,7 @@ next()
     socket.on("req:HTML", ( parsedData ) => {
       // ⭐︎ 우선은 전체로 내보내도록 설정함 => 추후에 해당 유저에게만 내보내도록 설정해야 함
 
-      axios
+      /*axios
         .post(process.env.TEMP_BASIC_HTML, parsedData)
         .then((response) => {
           console.log("post 성공");
@@ -72,7 +72,12 @@ next()
         })
         .catch((error) => {
           console.error(error);
-        });
+        });*/
+        axios.get("https://dummyjson.com/comments").then(()=>{
+          console.log("axios 요청")
+        })
+        io.sockets.emit("res:basicInfo", "기본 정보를 알려드릴게용~~~");
+
     });
 
 
