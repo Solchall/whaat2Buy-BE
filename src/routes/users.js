@@ -10,4 +10,6 @@ router.get(
   middlewares.verifyAccessToken,
   controllers.users.getLikesCloth
 );
+
+router.post("/message", middlewares.verifyAccessToken, controllers.users.saveUserMessage)
 module.exports = router;

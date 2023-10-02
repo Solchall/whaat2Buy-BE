@@ -47,8 +47,29 @@ const getLikesCloth = errorHandler(
   })
 );
 
+// @desc save User Message
+// @route get /api/users/message
+// @header {Bearer Token}
+// @access Private
+
+const saveUserMessage = errorHandler(
+  withTransaction(async (req, res, session) => {
+    console.log("users Controller: userMessage", req.body);
+
+    const userMessageDoc = models.userMessage({
+      owner: req.userId,
+      clothId: req.body.clothId,
+      message: req.body.message
+    });
+
+    await userMessageDoc.save({ session });
+    return { success: true };
+  })
+);
+
 module.exports = {
   me,
   likes,
   getLikesCloth,
+  saveUserMessage,
 };
