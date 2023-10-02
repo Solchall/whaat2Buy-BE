@@ -12,7 +12,10 @@ const info = errorHandler(withTransaction(async (req, res,session) => {
   if (!userDoc) {
     throw new HttpError(400, "User not found");
   }
-  return { username: userData.username , email:userData.email};
+  return {
+    username: userData.username,
+    email: userData.email,
+  };
 }));
 
 // @desc post user's farivate clothId
@@ -21,14 +24,22 @@ const info = errorHandler(withTransaction(async (req, res,session) => {
 // @access Private
 
 const likes =  errorHandler(withTransaction(async (req, res, session) => {
-  console.log("auth Controller: likes", req.body);
+  
 
-    const likesDoc = models.Likes({
-      owner: req.userId,
-      clothId: req.body.clothId,
-    });
+    const response = await models.Likes.findOneAndUpdate(
+      {
+        owner: req.userId,
+      },
+      {
+        $addToSet: {
+          clothId: { $each: [req.body.clothId] },
+        },
+      },
+      { new: true, upsert: true }
+    );
+    console.log("auth Controller: likes", response);
 
-    await likesDoc.save({ session });
+    //await likesDoc.save({ session });
   return  { success: true };
 }));
 
@@ -40,11 +51,13 @@ const likes =  errorHandler(withTransaction(async (req, res, session) => {
 
 const getLikesCloth = errorHandler(
   withTransaction(async (req, res, session) => {
-    const clothDoc = await models.Likes.find( { "owner": req.userId } )
+    const clothDoc = await models.Likes.findOne( { "owner": req.userId },{"clothId":1,"_id":0} )
+    // console.log(clothDoc["_doc"])
+    const data = clothDoc["_doc"]
     if (!clothDoc) {
       throw new HttpError(400, "User not found");
     }
-    return clothDoc;
+    return data
   })
 );
 
