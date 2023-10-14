@@ -14,6 +14,7 @@ const signup = errorHandler(
     const userDoc = models.User({
       username: req.body.username,
       email: req.body.email,
+      openAI:req.body.openAI,
       password: await argon2.hash(req.body.password),
     });
     const refreshTokenDoc = models.RefreshToken({
@@ -22,14 +23,17 @@ const signup = errorHandler(
     await userDoc.save({session});
     await refreshTokenDoc.save({session});
 
-    const refreshToken = createRefreshToken(userDoc.id, refreshTokenDoc.id);
-    const accessToken = createAccessToken(userDoc.id);
-
-    return {
+    //const refreshToken = createRefreshToken(userDoc.id, refreshTokenDoc.id);
+    //const accessToken = createAccessToken(userDoc.id);
+    /*const data = {
       id: userDoc.id,
       accessToken,
       refreshToken,
-    };
+    };*/
+
+    const data = { success: true };
+
+    return data;
   })
 );
 

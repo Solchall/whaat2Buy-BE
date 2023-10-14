@@ -15,6 +15,7 @@ const info = errorHandler(withTransaction(async (req, res,session) => {
   return {
     username: userData.username,
     email: userData.email,
+    openAI: userData.openAI,
   };
 }));
 

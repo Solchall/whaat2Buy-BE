@@ -8,11 +8,86 @@ function createInitialMsg(query) {
   return initialMessage;
 }
 
-function createRequestInfo(name){
-const requestMessage = `${name}에 대해 설명해줘`;
+function createRequestInfo(name, type){
+  let requestMessage;
+  if (type==="basic"){
+    requestMessage = `${name}이 어떤 상품인지 설명해줘`;
+  }
+  else if (type==="size"){
+   requestMessage = `${name}의 사이즈에 대해 설명해줘`; 
+  }
+
+  else if (type==="review"){
+    requestMessage=`${name}에 대한 다른 사람의 의견은 어때?`
+  }
+  else{
+    requestMessage="기타 설명";
+  }
+  console.log(requestMessage);
 return requestMessage;
 }
 
+async function createBasicInfo(productUrl, apikey) {
+  const apiURL =
+    "https://mighty-ridge-39909-c47917ae1ce7.herokuapp.com/items/details";
+  const body = {
+    productUrl,
+    apikey,
+  };
+  console.log("body", body);
+ const response =  axios
+    .post(apiURL, body)
+    .then(({ data: { simple_detail } }) => {
+     console.log(simple_detail)
+      return simple_detail
+    })
+    .catch((error) => {
+      console.error(error.data);
+    });
+console.log(response);
+    return response
+}
+async function createSizeInfo(productUrl, apikey) {
+  const apiURL =
+    "https://mighty-ridge-39909-c47917ae1ce7.herokuapp.com/items/details/size";
+  const body = {
+    productUrl,
+    apikey,
+  };
+  console.log("body", body);
+  const response = axios
+    .post(apiURL, body)
+    .then(({ data: { size_reco } }) => {
+      console.log(size_reco)
+      return size_reco;
+    })
+    .catch((error) => {
+      console.error(error);
+    });
+  console.log(response);
+  return response;
+}
+
+async function createReviewInfo(productUrl, apikey) {
+  const apiURL =
+    "https://mighty-ridge-39909-c47917ae1ce7.herokuapp.com/items/details/review";
+  const body = {
+    productUrl,
+    apikey,
+  };
+  console.log("body", body);
+  const response = axios
+    .post(apiURL, body)
+    .then(({ data: { review_summ } }) => {
+      console.log(review_summ)
+      return review_summ;
+    })
+    .catch((error) => {
+      console.error(error.data);
+    });
+  console.log(response);
+  return response;
+}
 module.exports = (server) => {
   const io = SocketIO(server);
   //console.log(io);
@@ -55,30 +130,43 @@ next()
       // console.log("데이터 저장")
     });
 
-    socket.on("req:basicInfo",({item})=>{
+    socket.on("req:basicInfo", async ({ productUrl, productName, apikey }) => {
+      console.log(productUrl, productName, apikey);
       // ⭐︎ 우선은 전체로 내보내도록 설정함 => 추후에 해당 유저에게만 내보내도록 설정해야 함
-      io.sockets.emit("req:basicInfo", createRequestInfo(item.name));
+      io.sockets.emit("req:basicInfo", createRequestInfo(productName,"basic"));
+      const simpleDetail = await createBasicInfo(productUrl, apikey)
+      console.log(simpleDetail)
+      io.sockets.emit("res:basicInfo", simpleDetail);
     });
 
-    socket.on("req:HTML", ( parsedData ) => {
-      // ⭐︎ 우선은 전체로 내보내도록 설정함 => 추후에 해당 유저에게만 내보내도록 설정해야 함
 
-      /*axios
-        .post(process.env.TEMP_BASIC_HTML, parsedData)
-        .then((response) => {
-          console.log("post 성공");
 
-          io.sockets.emit("res:basicInfo", "기본 정보를 알려드릴게용~~~");
-        })
-        .catch((error) => {
-          console.error(error);
-        });*/
-        axios.get("https://dummyjson.com/comments").then(()=>{
-          console.log("axios 요청")
-        })
-        io.sockets.emit("res:basicInfo", "기본 정보를 알려드릴게용~~~");
+    socket.on(
+      "req:sizeInfo",
+      async ({ productUrl, productName, apikey }) => {
+        console.log(productUrl, productName, apikey);
+        // ⭐︎ 우선은 전체로 내보내도록 설정함 => 추후에 해당 유저에게만 내보내도록 설정해야 함
+        io.sockets.emit("req:sizeInfo", createRequestInfo(productName,"size"));
+        const sizeReco = await createSizeInfo(productUrl, apikey);
+        console.log(sizeReco);
+        io.sockets.emit("res:sizeInfo", sizeReco);
+      }
+    );
 
-    });
+    socket.on(
+      "req:reviewInfo",
+      async ({ productUrl, productName, apikey }) => {
+        console.log(productUrl, productName, apikey);
+        // ⭐︎ 우선은 전체로 내보내도록 설정함 => 추후에 해당 유저에게만 내보내도록 설정해야 함
+        io.sockets.emit(
+          "req:reviewInfo",
+          createRequestInfo(productName, "review")
+        );
+        const reviewSumm = await createReviewInfo(productUrl, apikey);
+        console.log(reviewSumm);
+        io.sockets.emit("res:reviewInfo", reviewSumm);
+      }
+    );
 
 
 
