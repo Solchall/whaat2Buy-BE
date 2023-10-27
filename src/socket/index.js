@@ -27,7 +27,30 @@ function createRequestInfo(name, type){
 return requestMessage;
 }
 
+async function createFakeResponse(productNo, type){
+  const apiURL = `http://localhost:4000/clothes?no=${productNo}`;
+  const {data} = await axios.get(apiURL);
+  console.log(data)
+  const {simple_detail,size_reco, review_summ} = data[0];
+
+  console.log(simple_detail, size_reco, review_summ)
+
+  if (type==="basic"){
+    return simple_detail
+  }
+  else if (type==="size"){
+    return size_reco
+  }
+  else if (type==="review"){
+    return review_summ;
+  }
+  else{
+    return "기타 질문"
+  }
+}
+
 async function createBasicInfo(productUrl, apikey) {
+  const fakeAPI = ""
   const apiURL =
     "https://mighty-ridge-39909-c47917ae1ce7.herokuapp.com/items/details";
   const body = {
@@ -113,28 +136,63 @@ next()
 
     socket.on("initialAsk", async (data) => {
       // console.log("initialAsk", data, socket.userId);
-
       // ⭐︎ 우선은 전체로 내보내도록 설정함 => 추후에 해당 유저에게만 내보내도록 설정해야 함
       io.sockets.emit("initialAI", createInitialMsg(data.query));
 
-
-      // 유저 요청한 옷 스타일 DB 저장
-      const userMessageDoc = models.Chat({
+      /* 유저 요청한 옷 스타일 DB 저장
+      const chatDoc = models.Chat({
         owner: socket.userId,
         type:"initial Demand",
-        /*clothId: req.body.clothId,*/
+        clothId: req.body.clothId,
         message: data.query,
       });
 
-      await userMessageDoc.save();
+      await chatDoc.save();*/
       // console.log("데이터 저장")
     });
 
+
+    socket.on("req:basicInfo", async ({ productNo, productName }) => {
+      console.log(productNo, productName);
+      // ⭐︎ 우선은 전체로 내보내도록 설정함 => 추후에 해당 유저에게만 내보내도록 설정해야 함
+      io.sockets.emit("req:basicInfo", createRequestInfo(productName, "basic"));
+      const simpleDetail = await createFakeResponse(productNo, "basic"); //
+
+      console.log(simpleDetail);
+      io.sockets.emit("res:basicInfo", simpleDetail);
+    });
+
+    socket.on("req:sizeInfo", async ({ productNo, productName }) => {
+      console.log(productNo, productName);
+      // ⭐︎ 우선은 전체로 내보내도록 설정함 => 추후에 해당 유저에게만 내보내도록 설정해야 함
+      io.sockets.emit("req:sizeInfo", createRequestInfo(productName, "size"));
+      const sizeReco = await createFakeResponse(productNo, "size");
+      console.log(sizeReco);
+      io.sockets.emit("res:sizeInfo", sizeReco);
+    });
+
+
+      socket.on(
+        "req:reviewInfo",
+        async ({ productNo, productName }) => {
+          console.log(productNo, productName);
+          // ⭐︎ 우선은 전체로 내보내도록 설정함 => 추후에 해당 유저에게만 내보내도록 설정해야 함
+          io.sockets.emit(
+            "req:reviewInfo",
+            createRequestInfo(productName, "review")
+          );
+          const reviewSumm = await createFakeResponse(productNo, "review");
+          console.log(reviewSumm);
+          io.sockets.emit("res:reviewInfo", reviewSumm);
+        }
+      );
+    /*
     socket.on("req:basicInfo", async ({ productUrl, productName, apikey }) => {
       console.log(productUrl, productName, apikey);
       // ⭐︎ 우선은 전체로 내보내도록 설정함 => 추후에 해당 유저에게만 내보내도록 설정해야 함
       io.sockets.emit("req:basicInfo", createRequestInfo(productName,"basic"));
-      const simpleDetail = await createBasicInfo(productUrl, apikey)
+      const simpleDetail = await createBasicInfo(productUrl, apikey) //
+    
       console.log(simpleDetail)
       io.sockets.emit("res:basicInfo", simpleDetail);
     });
@@ -167,7 +225,7 @@ next()
         io.sockets.emit("res:reviewInfo", reviewSumm);
       }
     );
-
+*/
 
 
     socket.on("disconnect", () => {

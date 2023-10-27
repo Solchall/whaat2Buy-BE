@@ -67,18 +67,26 @@ const getLikesCloth = errorHandler(
 // @header {Bearer Token}
 // @access Private
 
-const saveUserMessage = errorHandler(
+const saveUserAsked = errorHandler(
   withTransaction(async (req, res, session) => {
     // console.log("users Controller: userMessage", req.body);
 
-    const userMessageDoc = models.userMessage({
-      owner: req.userId,
-      clothId: req.body.clothId,
-      message: req.body.message
-    });
+        const response = await models.Chat.findOneAndUpdate(
+          {
+            owner: req.userId,
+            message: req.body.message,
+          },
+          {
+            $addToSet: {
+              clothId: { $each: [req.body.clothId] },
+            },
+          },
+          { new: true, upsert: true }
+        );
+        // console.log("auth Controller: likes", response);
 
-    await userMessageDoc.save({ session });
-    return { success: true };
+        //await likesDoc.save({ session });
+        return { success: true };
   })
 );
 
@@ -86,5 +94,5 @@ module.exports = {
   info,
   likes,
   getLikesCloth,
-  saveUserMessage,
+  saveUserAsked,
 };
