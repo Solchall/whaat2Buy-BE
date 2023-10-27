@@ -11,5 +11,5 @@ router.get(
   controllers.users.getLikesCloth
 );
 
-router.post("/message", middlewares.verifyAccessToken, controllers.users.saveUserMessage)
+router.post("/asked", middlewares.verifyAccessToken, controllers.users.saveUserAsked)
 module.exports = router;

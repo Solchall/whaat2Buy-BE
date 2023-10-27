@@ -7,7 +7,7 @@ const cookieParser = require("cookie-parser");
 const logger = require("./logger");
 const routes = require("./routes");
 const connectToDatabase = require("./database");
-const webSocket = require("./socket");
+// const webSocket = require("./socket");
 
 
 
@@ -45,7 +45,7 @@ async function startServer() {
     logger.info(`Server listening at http://localhost:${port}`);
   });
 
-  webSocket(expressServer);
+  // webSocket(expressServer);
 
 }
 
