@@ -17,11 +17,12 @@ const signup = errorHandler(
       openAI:req.body.openAI,
       password: await argon2.hash(req.body.password),
     });
-    const refreshTokenDoc = models.RefreshToken({
-      owner: userDoc.id,
-    });
+
     await userDoc.save({session});
-    await refreshTokenDoc.save({session});
+       /* const refreshTokenDoc = models.RefreshToken({
+          owner: userDoc.id,
+        });*/
+    // await refreshTokenDoc.save({session});
 
     //const refreshToken = createRefreshToken(userDoc.id, refreshTokenDoc.id);
     //const accessToken = createAccessToken(userDoc.id);
@@ -173,7 +174,7 @@ function createAccessToken(userId) {
     },
     process.env.ACCESS_TOKEN_SECRET,
     {
-      expiresIn: "50m",
+      expiresIn: "5m",
     }
   );
 }
@@ -207,7 +208,7 @@ const validateRefreshToken = async (token) => {
       return jwt.verify(token, process.env.REFRESH_TOKEN_SECRET);
     } catch (err) {
       // err
-      throw new HttpError(401, "validateRefreshToken Unauthorized");
+      throw new HttpError(401, "validate RefreshToken Unauthorized");
     }
   };
 
