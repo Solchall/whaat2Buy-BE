@@ -19,8 +19,20 @@ const userSchema = new Schema({
     type: String,
     required: true,
   },
+  height: {
+    type: Number,
+    required: true,
+  },
+  weight: {
+    type: Number,
+    required: true,
+  },
+  interest: {
+    type: [String],
+    required: true,
+  },
 });
 
-const User = model("User", userSchema);
+const  User = model("User", userSchema);
 
 module.exports = User;

@@ -16,6 +16,9 @@ const signup = errorHandler(
       email: req.body.email,
       openAI:req.body.openAI,
       password: await argon2.hash(req.body.password),
+      height:req.body.height,
+      weight:req.body.weight,
+      interest:req.body.interest
     });
 
     await userDoc.save({session});
