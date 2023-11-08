@@ -9,5 +9,6 @@ router.post("/magazines", controllers.items.magazineItems);
 router.post("/details", controllers.items.detailItem);
 router.post("/review", controllers.items.detailReview);
 router.post("/size", controllers.items.detailSize);
+router.post("/ask", controllers.items.detailAsk);
 
 module.exports = router;

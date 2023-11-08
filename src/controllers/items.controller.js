@@ -33,7 +33,7 @@ const magazineItems = errorHandler(
 
 const detailItem = errorHandler(
   withTransaction(async (req, res, session) => {
-    const body = { apikey: req.body.apikey, productUrl: req.body.productUrl };
+    const body = { apikey: req.body.apikey, id: req.body.productNo };
     const response = await axios.post(
       `${process.env.AI_API_URL}/items/details`,
       body
@@ -44,7 +44,7 @@ const detailItem = errorHandler(
 );
 const detailSize = errorHandler(
   withTransaction(async (req, res, session) => {
-    const body = { apikey: req.body.apikey, productUrl: req.body.productUrl };
+    const body = { apikey: req.body.apikey, id: req.body.productNo };
     const response = await axios.post(
       `${process.env.AI_API_URL}/items/details/size`,
       body
@@ -55,9 +55,26 @@ const detailSize = errorHandler(
 );
 const detailReview = errorHandler(
   withTransaction(async (req, res, session) => {
-    const body = { apikey: req.body.apikey, productUrl: req.body.productUrl };
+    const body = { apikey: req.body.apikey, id: req.body.productNo };
     const response = await axios.post(
       `${process.env.AI_API_URL}/items/details/review`,
+      body
+    );
+
+    return response.data;
+  })
+);
+
+
+const detailAsk = errorHandler(
+  withTransaction(async (req, res, session) => {
+    const body = {
+      apikey: req.body.apikey,
+      user_question: req.body.userQuestion,
+      id: req.body.productNo,
+    };
+    const response = await axios.post(
+      `${process.env.AI_API_URL}/items/ask`,
       body
     );
 
@@ -70,4 +87,5 @@ module.exports = {
   detailItem,
   detailSize,
   detailReview,
+  detailAsk,
 };
