@@ -68,11 +68,13 @@ const detailReview = errorHandler(
 
 const detailAsk = errorHandler(
   withTransaction(async (req, res, session) => {
+    
     const body = {
       apikey: req.body.apikey,
       user_question: req.body.userQuestion,
       id: req.body.productNo,
     };
+    console.log("ask", body);
     const response = await axios.post(
       `${process.env.AI_API_URL}/items/ask`,
       body
