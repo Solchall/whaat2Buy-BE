@@ -177,7 +177,7 @@ function createAccessToken(userId) {
     },
     process.env.ACCESS_TOKEN_SECRET,
     {
-      expiresIn: "5m",
+      expiresIn: "50m",
     }
   );
 }
