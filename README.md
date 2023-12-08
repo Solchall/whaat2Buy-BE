@@ -6,7 +6,7 @@
 사용자의 자유로운 언어적 요청을 해석해 상품을 찾아주고 상품에 대한 정보제공 질의응답을 제공하는 1:1 쇼핑 도우미 챗봇 서비스
 
 ## API 명세서
-<img width="612" alt="image" src="https://github.com/What2buy/whaat2Buy-BE/assets/67853616/ddaba0ca-2c1f-4437-bd34-c5f282d6074c">
+<img width="100%" alt="image" src="https://github.com/What2buy/whaat2Buy-BE/assets/67853616/ddaba0ca-2c1f-4437-bd34-c5f282d6074c">
 
 ## 사용 스택
 
@@ -16,4 +16,5 @@
 ![Render](https://img.shields.io/badge/Render-%46E3B7.svg?style=for-the-badge&logo=render&logoColor=white)
 
 ## ERD
-![image](https://github.com/What2buy/whaat2Buy-BE/assets/67853616/ee254ea4-45da-4bb4-9413-d513d109da83)
+<img width="100%" alt="image" src="https://github.com/What2buy/whaat2Buy-BE/assets/67853616/ee254ea4-45da-4bb4-9413-d513d109da83">
+
